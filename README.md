@@ -31,8 +31,8 @@ This is what basic in-game HUD looks like on a Chroma Keyboard. Certain in-game 
 
 * Windows
 * League of Legends
-* Razer Synapse 3 (with Chroma Connect module enabled)
-* Chroma enabled keyboard
+* Razer Synapse 4 (with Chroma Connect module enabled)
+* Chroma enabled keyboard (Tested on Razer BlackWidow V4 Pro)
 * Python 3.10+ (if running from source)
 
 ## Running
