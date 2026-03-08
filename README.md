@@ -50,12 +50,21 @@ Simply download the latest release, unpack it, and run `ChromaLeague.exe` locate
 
 3. Run the main script:
 ```bash
-python src/chromaleague/main.py
-
+python -m src.chromaleague.main
 ```
 
-
-
+### Method 3: Compiling into an Executable (.exe)
+If you want to create a portable `.exe` build for your friends or to run without Python installed, you can use `PyInstaller`.
+1. Ensure the requirements are installed alongside PyInstaller:
+   ```bash
+   pip install -r requirements.txt
+   pip install pyinstaller
+   ```
+2. Run the compilation script:
+   ```bash
+   pyinstaller --noconfirm --onedir --windowed --add-data "config.json;." src/chromaleague/main.py
+   ```
+3. Your built application will be stored in the `/dist/main` folder!
 After starting the application, it will verify connectivity to the local Razer SDK and log REST API versions like:
 `[INFO] Detected Razer Chroma REST Api Version[core=3.23.03, device=3.23.04, version=3.23.05]`
 
@@ -69,23 +78,32 @@ This means that **Chroma League** has successfully passed startup checks. It wil
 
 ## Implemented integrations
 
-* animated health bar (with health loss and gain animations)
-* animated resource bar (customized for all champions)
-* level up animation
-* gold pouch with animated coins (3000 gold means pouch is full)
-* enemy/ally dragon/herald/baron kill indicators
-* dragons killed by allies counter
-* dragon soul indicator
-* baron/elder buff indicator
-* killing spree counter
-* assist spree counter
-* kill/assist animation
-* respawn animation
-* dead animation
-* rift change animation
-* dim background light for the keyboard for playing in the dark
-* game victory animation
-* game defeat animation
+* Base configuration framework (`ConfigManager`) and hot-reloading Configuration UI (`ConfiguratorGUI`)
+* Animated health bar (with health loss and gain animations)
+* Animated resource bar (customized for all champions e.g., Mana, Energy, Fury, Shield)
+* Active Item Readiness indicators directly mirrored to keys `1-6`
+* Respawn timer visual countdown mapped across number keys
+* Ally status indicators (Alive/Dead state mapped to `F1-F4` keys)
+* Burst damage detection warning flashes
+* Creep Score (CS) per minute metronome dynamically scaling arrow keys colors
+* Vision Score mapping tracker
+* Modulized keyboard flashes for Champion kills, Epic Monster kills
+* Scaled multikill LED animations (Double, Triple, Quadra, and Penta)
+* Spell cooldown and availability highlighting module (Q/W/E/R/D/F)
+* Gold pouch module on the Numpad cluster
+
+## Keyboard Map / Bindings
+
+The following default keys are mapped to these integrations:
+- **`F1 - F4`**: Ally Status (Alive = Green, Dead = Dim Red)
+- **`1 - 6`**: Active Item Readiness (Lights up when an item with an active ability in that slot is off cooldown)
+- **`1 - 0`**: Respawn Timer (When dead, the number row acts as a progress bar ticking down to your respawn)
+- **`Q, W, E, R`**: Spell levels (Lights up when you have learned the spell)
+- **`D, F`**: Summoner Spells (Static highlight)
+- **Arrow Keys**: CS/min Metronome (Interpolates from Red to Green depending on how close you are to 8.0 CS/min)
+- **`Insert, Home, PageUp, Delete, End, PageDown`**: Vision Tracker (Fills up progressively for every 10 Ward Score)
+- **`Numpad`**: Gold Pouch (Fills up with gold coins up to 3000g)
+- **Main Typing Zone**: Health Bar (Top rows) & Resource Bar (Bottom rows)
 
 ## Troubleshooting
 

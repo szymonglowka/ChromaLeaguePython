@@ -1,0 +1,147 @@
+{
+    "hud": {
+        "colors": {
+            "c_off": [
+                226,
+                231,
+                71
+            ],
+            "c_health": [
+                206,
+                0,
+                41
+            ],
+            "c_health_dead": [
+                50,
+                0,
+                0
+            ],
+            "c_mana": [
+                0,
+                0,
+                255
+            ],
+            "c_energy": [
+                255,
+                255,
+                0
+            ],
+            "c_fury": [
+                255,
+                0,
+                0
+            ],
+            "c_shield": [
+                255,
+                255,
+                255
+            ],
+            "c_no_resource": [
+                20,
+                20,
+                20
+            ],
+            "c_gold": [
+                255,
+                215,
+                0
+            ],
+            "c_spell_ready": [
+                148,
+                0,
+                211
+            ],
+            "c_orange": [
+                255,
+                140,
+                0
+            ],
+            "c_dead_bg": [
+                40,
+                0,
+                33
+            ],
+            "c_kill_flash": [
+                255,
+                0,
+                0
+            ],
+            "c_epic_monster_flash": [
+                128,
+                0,
+                128
+            ],
+            "c_ally_alive": [
+                0,
+                255,
+                0
+            ],
+            "c_ally_dead": [
+                50,
+                0,
+                0
+            ],
+            "c_double_kill": [
+                0,
+                255,
+                255
+            ],
+            "c_triple_kill": [
+                255,
+                105,
+                180
+            ],
+            "c_quadra_kill": [
+                255,
+                0,
+                0
+            ],
+            "c_penta_kill": [
+                255,
+                215,
+                0
+            ],
+            "c_burst_damage": [
+                255,
+                255,
+                255
+            ],
+            "c_item_ready": [
+                255,
+                255,
+                255
+            ],
+            "c_cs_poor": [
+                255,
+                0,
+                0
+            ],
+            "c_cs_good": [
+                0,
+                255,
+                0
+            ],
+            "c_vision_score": [
+                148,
+                0,
+                211
+            ]
+        },
+        "features": {
+            "enable_animations": true,
+            "enable_kill_flash": true,
+            "enable_epic_monster_flash": true,
+            "enable_level_up_flash": true,
+            "enable_gold_module": true,
+            "enable_spell_module": true,
+            "enable_respawn_timer": true,
+            "enable_ally_status": true,
+            "enable_multikill_animations": true,
+            "enable_item_indicator": true,
+            "enable_burst_warning": true,
+            "burst_threshold_percent": 30.0,
+            "enable_cs_metronome": true,
+            "enable_vision_tracker": true
+        }
+    }
+}
