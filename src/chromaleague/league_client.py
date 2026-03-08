@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class AsyncLeagueClient:
-    # Riot używa zamiennie dwóch portów dla Live Client Data API w zależności od patcha
+    # Riot interchangeably uses two ports for Live Client Data API depending on the patch
     PORTS = [29292, 2999]
 
     def __init__(self, timeout: float = 1.0):
@@ -35,7 +35,7 @@ class AsyncLeagueClient:
 
     async def get_all_game_data(self) -> Optional[Dict[str, Any]]:
         if not self.session:
-            # Pomijamy weryfikację SSL, ponieważ Riot używa certyfikatów self-signed
+            # Skipping SSL verification because Riot uses self-signed certificates
             connector = aiohttp.TCPConnector(ssl=False)
             self.session = aiohttp.ClientSession(connector=connector, timeout=self.timeout)
 
@@ -46,17 +46,17 @@ class AsyncLeagueClient:
             try:
                 async with self.session.get(url) as response:
                     response.raise_for_status()
-                    # Jeśli się udało, zapisujemy port na przyszłość
+                    # If successful, save the port for the future
                     self.active_port = port
                     if self._log_suppressed:
-                        logger.info(f"Pomyślnie połączono z grą na porcie {port}!")
+                        logger.info(f"Successfully connected to the game on port {port}!")
                         self._log_suppressed = False
                     return await response.json()
             except (aiohttp.ClientError, asyncio.TimeoutError):
-                continue  # Jeśli się nie udało, spróbuj kolejnego portu z listy
+                continue  # If unsuccessful, try the next port from the list
 
         if not self._log_suppressed:
-            logger.info("Oczekiwanie na uruchomienie meczu w League of Legends...")
+            logger.info("Waiting for League of Legends match to start...")
             self._log_suppressed = True
 
         self.active_port = None

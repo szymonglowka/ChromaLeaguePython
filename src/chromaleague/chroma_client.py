@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class ChromaResultError(Exception):
-    """Wyjątek rzucany, gdy Chroma SDK zwróci błąd (result != 0)."""
+    """Exception thrown when Chroma SDK returns an error (result != 0)."""
     pass
 
 
@@ -42,48 +42,48 @@ class AsyncChromaClient:
 
     @property
     def session_url(self) -> str:
-        """Dynamiczny adres URL używający session_id jako portu."""
+        """Dynamic URL using session_id as the port."""
         return f"http://{self.host}:{self._sid}/chromasdk"
 
     async def _async_request(self, method: str, url: str, json_data: dict = None) -> dict:
-        """Centralna metoda do wysyłania zapytań z weryfikacją błędów."""
+        """Central method for sending requests with error verification."""
         if not self.session:
-            raise ConnectionError("Brak otwartej sesji aiohttp.")
+            raise ConnectionError("No open aiohttp session.")
 
         async with self.session.request(method, url, json=json_data, headers=self.headers) as response:
             if response.status == 404:
-                raise ConnectionError("Brak dostępu do Chroma SDK (Błąd 404).")
+                raise ConnectionError("No access to Chroma SDK (Error 404).")
 
             response.raise_for_status()
             data = await response.json()
 
-            # Weryfikacja kodu błędu od Razera
+            # Verification of error code from Razer
             if "result" in data and data["result"] != 0:
-                raise ChromaResultError(f"Chroma SDK zwróciło błąd: {data['result']}")
+                raise ChromaResultError(f"Chroma SDK returned error: {data['result']}")
 
-            # Domyślny rate-limiting
+            # Default rate-limiting
             await asyncio.sleep(0.1)
             return data
 
     async def async_identify(self) -> bool:
-        """Identyfikacja interfejsu (krok 1)."""
+        """Interface identification (step 1)."""
         try:
             async with self.session.get(self.init_url, headers=self.headers) as response:
                 if response.status == 200:
                     data = await response.json()
                     if "version" in data:
-                        logger.info(f"Rozpoznano Chroma SDK wersja: {data['version']}")
+                        logger.info(f"Recognized Chroma SDK version: {data['version']}")
                         return True
         except Exception as e:
-            logger.debug(f"Błąd podczas identyfikacji: {e}")
+            logger.debug(f"Error during identification: {e}")
         return False
 
     async def async_connect(self) -> bool:
-        """Rejestracja aplikacji i inicjalizacja sesji (krok 2)."""
+        """Application registration and session initialization (step 2)."""
         self.session = aiohttp.ClientSession()
 
         if not await self.async_identify():
-            logger.error("Nie udało się zidentyfikować Chroma SDK.")
+            logger.error("Failed to identify Chroma SDK.")
             return False
 
         payload = {
@@ -99,21 +99,21 @@ class AsyncChromaClient:
             if "sessionid" in data:
                 self._sid = int(data["sessionid"])
                 self._connected = True
-                logger.info(f"Połączono. ID Sesji (Port): {self._sid}")
+                logger.info(f"Connected. Session ID (Port): {self._sid}")
 
-                # Inicjalne podtrzymanie sesji (dwukrotne)
+                # Initial session heartbeat (twice)
                 await self.async_keep()
                 await self.async_keep()
 
                 self._heartbeat_task = asyncio.create_task(self._heartbeat_loop())
                 return True
         except Exception as e:
-            logger.error(f"Nie udało się połączyć z SDK: {e}")
+            logger.error(f"Failed to connect to SDK: {e}")
 
         return False
 
     async def async_keep(self):
-        """Podtrzymanie sesji - Heartbeat (krok 4)."""
+        """Session keep-alive - Heartbeat (step 4)."""
         if not self._connected:
             return
         try:
@@ -123,13 +123,13 @@ class AsyncChromaClient:
             logger.debug(f"Heartbeat failed: {e}")
 
     async def _heartbeat_loop(self):
-        """Asynchroniczna pętla podtrzymująca połączenie."""
+        """Asynchronous loop for maintaining connection."""
         while self._connected:
             await asyncio.sleep(1.0)
             await self.async_keep()
 
     async def async_disconnect(self):
-        """Kończenie sesji (krok 5)."""
+        """Closing session (step 5)."""
         self._connected = False
         if self._heartbeat_task:
             self._heartbeat_task.cancel()
@@ -137,9 +137,9 @@ class AsyncChromaClient:
         if self._sid and self.session:
             try:
                 await self._async_request("DELETE", self.session_url)
-                logger.info("Rozłączono z Chroma SDK.")
+                logger.info("Disconnected from Chroma SDK.")
             except Exception as e:
-                logger.error(f"Błąd podczas rozłączania: {e}")
+                logger.error(f"Error during disconnection: {e}")
 
         if self.session:
             await self.session.close()
@@ -147,13 +147,13 @@ class AsyncChromaClient:
     @staticmethod
     def rgb_to_razer(r: int, g: int, b: int) -> int:
         """
-        Formuła obliczania koloru (odwrócony model BGR): R + G * 256 + B * 65536
+        Color calculation formula (reversed BGR model): R + G * 256 + B * 65536
         """
         r, g, b = max(0, min(255, r)), max(0, min(255, g)), max(0, min(255, b))
         return r + (g * 256) + (b * 65536)
 
     async def async_effect_keyboard(self, matrix: List[List[int]]) -> bool:
-        """Wysyłanie niestandardowej matrycy CHROMA_CUSTOM (krok 3)."""
+        """Sending custom matrix CHROMA_CUSTOM (step 3)."""
         if not self._connected:
             return False
 
@@ -166,5 +166,5 @@ class AsyncChromaClient:
             await self._async_request("PUT", f"{self.session_url}/keyboard", json_data=payload)
             return True
         except Exception as e:
-            logger.debug(f"Błąd wysyłania matrycy: {e}")
+            logger.debug(f"Error sending matrix: {e}")
             return False

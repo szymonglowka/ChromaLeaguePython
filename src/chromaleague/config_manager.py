@@ -10,19 +10,19 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ColorConfig:
     c_off: List[int] = field(default_factory=lambda: [0, 0, 0])
-    c_health: List[int] = field(default_factory=lambda: [0, 255, 0])  # Zielony
-    c_health_dead: List[int] = field(default_factory=lambda: [50, 0, 0])  # Ciemna czerwień
+    c_health: List[int] = field(default_factory=lambda: [0, 255, 0])  # Green
+    c_health_dead: List[int] = field(default_factory=lambda: [50, 0, 0])  # Dark red
 
-    c_mana: List[int] = field(default_factory=lambda: [0, 0, 255])  # Niebieski
-    c_energy: List[int] = field(default_factory=lambda: [255, 255, 0])  # Żółty
-    c_fury: List[int] = field(default_factory=lambda: [255, 0, 0])  # Czerwony
-    c_shield: List[int] = field(default_factory=lambda: [255, 255, 255])  # Biały
-    c_no_resource: List[int] = field(default_factory=lambda: [20, 20, 20])  # Ciemnoszary
+    c_mana: List[int] = field(default_factory=lambda: [0, 0, 255])  # Blue
+    c_energy: List[int] = field(default_factory=lambda: [255, 255, 0])  # Yellow
+    c_fury: List[int] = field(default_factory=lambda: [255, 0, 0])  # Red
+    c_shield: List[int] = field(default_factory=lambda: [255, 255, 255])  # White
+    c_no_resource: List[int] = field(default_factory=lambda: [20, 20, 20])  # Dark gray
 
-    c_gold: List[int] = field(default_factory=lambda: [255, 215, 0])  # Złoty
-    c_spell_ready: List[int] = field(default_factory=lambda: [148, 0, 211])  # Fioletowy
-    c_orange: List[int] = field(default_factory=lambda: [255, 140, 0])  # Pomarańczowy dla D/F
-    c_dead_bg: List[int] = field(default_factory=lambda: [20, 20, 20])  # Szare tło po śmierci
+    c_gold: List[int] = field(default_factory=lambda: [255, 215, 0])  # Gold
+    c_spell_ready: List[int] = field(default_factory=lambda: [148, 0, 211])  # Purple
+    c_orange: List[int] = field(default_factory=lambda: [255, 140, 0])  # Orange for D/F
+    c_dead_bg: List[int] = field(default_factory=lambda: [20, 20, 20])  # Gray background on death
     
     c_kill_flash: List[int] = field(default_factory=lambda: [255, 0, 0])
     c_epic_monster_flash: List[int] = field(default_factory=lambda: [128, 0, 128])

@@ -45,10 +45,10 @@ class ChromaLeagueApp:
 
     async def run(self):
         if not await self.chroma.async_connect():
-            logger.error("Nie udało się uruchomić klienta Chroma. Zamykam...")
+            logger.error("Failed to start Chroma client. Shutting down...")
             return
 
-        logger.info("AIOChromaLeague uruchomione.")
+        logger.info("AIOChromaLeague started.")
 
         try:
             while self.running:
@@ -65,7 +65,7 @@ class ChromaLeagueApp:
                     matrix = self.hud.get_matrix()
                     await self.chroma.async_effect_keyboard(matrix)
                 else:
-                    # Wygaś klawiaturę (czarna matryca), gdy gra nie działa
+                    # Turn off keyboard (black matrix) when game is not running
                     empty_matrix = [[0] * 22 for _ in range(6)]
                     await self.chroma.async_effect_keyboard(empty_matrix)
                     await asyncio.sleep(1.0)
@@ -73,7 +73,7 @@ class ChromaLeagueApp:
                 await asyncio.sleep(0.1)
 
         except asyncio.CancelledError:
-            logger.info("Przerwano działanie aplikacji.")
+            logger.info("Application interrupted.")
         finally:
             self.running = False
             await self.chroma.async_disconnect()
@@ -110,5 +110,5 @@ if __name__ == "__main__":
         app.running = False
         logger.info("GUI closed, shutting down background thread...")
     except KeyboardInterrupt:
-        logger.info("Aplikacja zamknięta przez użytkownika (Ctrl+C).")
+        logger.info("Application closed by user (Ctrl+C).")
         app.running = False

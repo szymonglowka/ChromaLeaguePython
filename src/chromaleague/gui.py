@@ -31,17 +31,26 @@ class ConfiguratorGUI(ctk.CTk):
         self.tab_events = self.tabview.add("Events")
         self.tab_advanced = self.tabview.add("Advanced Trackers")
 
-        self.color_buttons = {}
-        self.checkboxes = {}
+        from typing import Dict, Any
+        self.color_buttons: Dict[str, Any] = {}
+        self.checkboxes: Dict[str, ctk.BooleanVar] = {}
 
         self._build_general_tab()
         self._build_health_tab()
         self._build_events_tab()
         self._build_advanced_tab()
 
+        # Bottom Buttons Frame
+        self.bottom_frame = ctk.CTkFrame(self, fg_color="transparent")
+        self.bottom_frame.pack(pady=10)
+
         # Save Button
-        self.save_btn = ctk.CTkButton(self, text="Save Configuration", command=self.save_config)
-        self.save_btn.pack(pady=10)
+        self.save_btn = ctk.CTkButton(self.bottom_frame, text="Save Configuration", command=self.save_config)
+        self.save_btn.pack(side="left", padx=10)
+
+        # Restore Defaults Button
+        self.restore_btn = ctk.CTkButton(self.bottom_frame, text="Restore Defaults", command=self.restore_defaults, fg_color="#8B0000", hover_color="#A52A2A")
+        self.restore_btn.pack(side="left", padx=10)
         
         # Status Label
         self.status_lbl = ctk.CTkLabel(self, text="League API: Waiting...", font=("Arial", 14, "bold"), text_color="orange")
@@ -144,6 +153,25 @@ class ConfiguratorGUI(ctk.CTk):
             # Change text color if background is too light to maintain readability
             text_col = "black" if (rgb[0]*0.299 + rgb[1]*0.587 + rgb[2]*0.114) > 186 else "white"
             btn.configure(fg_color=hex_color, hover_color=hex_color, text_color=text_col)
+
+    def restore_defaults(self):
+        default_config = AppConfig()
+        
+        f_default = default_config.hud.features
+        for key, var in self.checkboxes.items():
+            if hasattr(f_default, key):
+                var.set(getattr(f_default, key))
+                
+        c_default = default_config.hud.colors
+        for key, data in self.color_buttons.items():
+            if hasattr(c_default, key):
+                default_rgb = getattr(c_default, key)
+                data["rgb"] = list(default_rgb)
+                hex_color = "#{:02x}{:02x}{:02x}".format(*default_rgb)
+                text_col = "black" if (default_rgb[0]*0.299 + default_rgb[1]*0.587 + default_rgb[2]*0.114) > 186 else "white"
+                data["btn"].configure(fg_color=hex_color, hover_color=hex_color, text_color=text_col)
+                
+        self.save_config()
 
     def save_config(self):
         # Update app_config from UI
