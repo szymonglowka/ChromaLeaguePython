@@ -39,13 +39,11 @@ Simply download the latest release, unpack it, and run `ChromaLeague.exe` locate
 2. Install the required dependencies:
    ```bash
    pip install -r requirements.txt
-
-```
-
+   ```
 3. Run the main script:
-```bash
-python -m src.chromaleague.main
-```
+   ```bash
+   python -m src.chromaleague.main
+   ```
 
 ### Method 3: Compiling into an Executable (.exe)
 If you want to create a portable `.exe` build for your friends or to run without Python installed, you can use `PyInstaller`.
