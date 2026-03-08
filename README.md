@@ -21,12 +21,6 @@ is not one of them.
 
 If you have any comments or suggestions regarding the original concept, please visit the official thread at Razer Insider: [Chroma League - League of Legends integration for Razer Chroma](https://insider.razer.com/index.php?threads/chroma-league-league-of-legends-integration-for-razer-chroma.65412/).
 
-## Overview
-
-![Chroma League HUD](https://raw.githubusercontent.com/bonepl/ChromaLeague/master/doc/images/ChromaLeague.png "Chroma League HUD")
-
-This is what basic in-game HUD looks like on a Chroma Keyboard. Certain in-game events will spawn additional animations.
-
 ## Requirements
 
 * Windows
